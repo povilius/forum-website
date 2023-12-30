@@ -1,20 +1,12 @@
-
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Login from '../components/Login';
-import Register from '../components/Register';
-import Home from '../pages/Home';
+import { UserProvider } from "../context/UserContext";
+import AppRoutes from "../routes/AppRoutes";
 
 const App = () => {
   return (
-    <Router>
-      <Switch>
-        <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
-        <Route path="/" exact component={Home} />
-      </Switch>
-    </Router>
-  )
-}
+    <UserProvider>
+      <AppRoutes />
+    </UserProvider>
+  );
+};
 
 export default App;
-

@@ -1,36 +1,57 @@
-
-import { useEffect, useState } from 'react'
-import api from '../services/api'
+import { useContext, useEffect, useState } from "react";
+import PostCard from "../components/PostCard";
+import PostForm from "../components/PostForm";
+import { UserContext } from "../context/UserContext";
+import { fetchQuestions, createQuestion, deleteQuestion } from "../api/questions";
+import styles from "./Home.module.scss";
 
 const Home = () => {
-  const [questions, setQuestions] = useState([])
+  const { user, isLoggedIn } = useContext(UserContext);
+  const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const response = await api.get('/questions')
-        setQuestions(response.data)
-      } catch (error) {
-        console.error('Error fetching questions:', error.response.data.error)
-      }
-    }
-
     fetchQuestions()
-  }, [])
+      .then((response) => {
+        setQuestions(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const handleSubmit = async (values) => {
+    try {
+      const question = { ...values, createdBy: user.email };
+      const response = await createQuestion(question);
+      setQuestions((prevQuestions) => [...prevQuestions, response]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDeleteQuestion = async (id) => {
+    try {
+      await deleteQuestion(id);
+      setQuestions((prevQuestions) => prevQuestions.filter((question) => question.id !== id));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-    <div>
-      <h2>Home</h2>
-      <ul>
+    <div className={styles.container}>
+      {isLoggedIn && <PostForm handleSubmit={handleSubmit} />}
+      <div className={styles.posts}>
         {questions.map((question) => (
-          <li key={question._id}>
-            <p>{question.title}</p>
-            <p>{question.content}</p>
-          </li>
+          <PostCard
+            key={question.id}
+            post={question}
+            handleDeleteQuestion={() =>  handleDeleteQuestion(question.id)}
+          />
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
 
-export default Home
+export default Home;

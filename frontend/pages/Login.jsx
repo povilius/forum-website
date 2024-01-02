@@ -24,7 +24,7 @@ const Login = () => {
   const handleSubmit = async (values) => {
     try {
       const response = await loginUser(values);
-      if (response) {
+      if (response && response.userId) {
         setUser(response);
         setError("");
         navigate(PATHS.Home);
@@ -35,6 +35,7 @@ const Login = () => {
       console.error(error);
     }
   };
+  
 
   return (
     <div className={styles.loginContainer}>

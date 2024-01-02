@@ -4,7 +4,7 @@ import styles from "./FormField.module.scss";
 const Input = ({ label, ...props }) => {
   return (
     <div className={styles.formField}>
-      {label && <label htmlFor={props.name}>{label}</label>}
+      {label && <label htmlFor={props.title}>{label}</label>}
       <input {...props} />
     </div>
   );
@@ -12,8 +12,8 @@ const Input = ({ label, ...props }) => {
 
 Input.propTypes = {
   label: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
 };
 

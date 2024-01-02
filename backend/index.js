@@ -6,7 +6,7 @@ require("dotenv").config()
 
 const port = process.env.PORT || 8080
 const URI = process.env.DB_CONNECTION_STRING
-const client = new MongoClient(URI, { useNewUrlParser: true, useUnifiedTopology: true })
+const client = new MongoClient(URI)
 
 const app = express()
 app.use(cors())
@@ -28,11 +28,11 @@ async function start() {
 start()
 
 app.post("/register", async (req, res) => {
-  const { username, password } = req.body
+  const { username, email, password } = req.body
 
   try {
     const existingUser = await client
-      .db()
+      .db("forum-website")
       .collection("users")
       .findOne({ username })
 
@@ -44,11 +44,12 @@ app.post("/register", async (req, res) => {
 
     const newUser = {
       username,
+      email,
       password: hashedPassword,
     }
 
     const result = await client
-      .db()
+      .db("forum-website")
       .collection("users")
       .insertOne(newUser)
 
@@ -65,7 +66,7 @@ app.post("/login", async (req, res) => {
 
   try {
     const user = await client
-      .db()
+      .db("forum-website")
       .collection("users")
       .findOne({ username })
 
@@ -86,11 +87,26 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.get("/users", async (req, res) => {
+  try {
+    const users = await client
+      .db("forum-website")
+      .collection("users")
+      .find()
+      .toArray();
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 app.get("/questions", async (req, res) => {
   try {
     const questions = await client
-      .db()
+      .db("forum-website")
       .collection("questions")
       .find()
       .sort({ createdAt: -1 })
@@ -116,7 +132,7 @@ app.post("/questions", async (req, res) => {
     }
 
     const result = await client
-      .db()
+      .db("forum-website")
       .collection("questions")
       .insertOne(newQuestion)
 
@@ -133,7 +149,7 @@ app.patch("/questions/:id", async (req, res) => {
 
   try {
     const result = await client
-      .db()
+      .db("forum-website")
       .collection("questions")
       .updateOne({ _id: ObjectId(questionId) }, { $set: { title, content } })
 
@@ -153,7 +169,7 @@ app.delete("/questions/:id", async (req, res) => {
 
   try {
     const result = await client
-      .db()
+      .db("forum-website")
       .collection("questions")
       .deleteOne({ _id: ObjectId(questionId) })
 
@@ -173,7 +189,7 @@ app.get("/questions/:id/answers", async (req, res) => {
 
   try {
     const question = await client
-      .db()
+      .db("forum-website")
       .collection("questions")
       .findOne({ _id: ObjectId(questionId) })
 
@@ -202,7 +218,7 @@ app.post("/questions/:id/answers", async (req, res) => {
     }
 
     const result = await client
-      .db()
+      .db("forum-website")
       .collection("questions")
       .updateOne({ _id: ObjectId(questionId) }, { $push: { answers: newAnswer } })
 
@@ -223,7 +239,7 @@ app.patch("/answers/:id", async (req, res) => {
 
   try {
     const result = await client
-      .db()
+      .db("forum-website")
       .collection("questions")
       .updateOne({ "answers._id": ObjectId(answerId) }, { $set: { "answers.$.content": content } })
 
@@ -243,7 +259,7 @@ app.delete("/answers/:id", async (req, res) => {
 
   try {
     const result = await client
-      .db()
+      .db("forum-website")
       .collection("questions")
       .updateOne({}, { $pull: { answers: { _id: ObjectId(answerId) } } })
 
@@ -264,7 +280,7 @@ app.post("/answers/:id/like", async (req, res) => {
 
   try {
     const result = await client
-      .db()
+      .db("forum-website")
       .collection("questions")
       .updateOne({ "answers._id": ObjectId(answerId) }, { $inc: { "answers.$.likes": 1 } })
 
@@ -284,7 +300,7 @@ app.post("/answers/:id/dislike", async (req, res) => {
 
   try {
     const result = await client
-      .db()
+      .db("forum-website")
       .collection("questions")
       .updateOne({ "answers._id": ObjectId(answerId) }, { $inc: { "answers.$.dislikes": 1 } })
 
@@ -302,7 +318,7 @@ app.post("/answers/:id/dislike", async (req, res) => {
 app.get("/questions/answered", async (req, res) => {
   try {
     const questions = await client
-      .db()
+      .db("forum-website")
       .collection("questions")
       .find({ answers: { $exists: true, $not: { $size: 0 } } })
       .sort({ createdAt: -1 })
@@ -318,7 +334,7 @@ app.get("/questions/answered", async (req, res) => {
 app.get("/questions/unanswered", async (req, res) => {
   try {
     const questions = await client
-      .db()
+      .db("forum-website")
       .collection("questions")
       .find({ answers: { $exists: false } })
       .sort({ createdAt: -1 })

@@ -11,7 +11,7 @@ const PostCard = ({ question, handleDeleteQuestion }) => {
     <div className={styles.postCard}>
       <h2 className={styles.postTitle}>{question.title}</h2>
       <div className={styles.postFooter}>
-        <p className={styles.postText}>{question.text}</p>
+        <p className={styles.postText}>{question.content}</p>
         {user && question.createdBy === user.email && (
           <Button onClick={handleDeleteQuestion}>Delete</Button>
         )}
@@ -24,7 +24,7 @@ PostCard.propTypes = {
   question: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
     createdBy: PropTypes.string.isRequired,
   }).isRequired,
   handleDeleteQuestion: PropTypes.func.isRequired,

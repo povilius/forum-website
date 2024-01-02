@@ -8,16 +8,19 @@ export const fetchUsers = async () => {
 
 export const createUser = async (user) => {
   // {username, email, password}
-  const response = await axios.post(`${API}/users`, user)
+  const response = await axios.post(`${API}/register`, user)
   return response.data
 }
 
+
 export const loginUser = async (loggingUser) => {
-  // {username, password}
-  const users = await fetchUsers()
-  return users.find(
-    (user) =>
-      user.username === loggingUser.username &&
-      user.password === loggingUser.password
-  )
-}
+  // { username, password }
+  try {
+    const response = await axios.post(`${API}/login`, loggingUser);
+    return response.data;
+  } catch (error) {
+    console.error("Error logging in user", error);
+    return null;
+  }
+};
+

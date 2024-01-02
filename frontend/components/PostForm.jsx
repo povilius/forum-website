@@ -7,32 +7,23 @@ import styles from "./PostForm.module.scss";
 
 const postSchema = Yup.object().shape({
   title: Yup.string().required("Required"),
-  text: Yup.string().required("Required"),
-  imageUrl: Yup.string().url("Url should be valid").required("Required"),
+  content: Yup.string().required("Required")
 });
 
 const PostForm = ({ handleSubmit }) => {
   return (
     <Formik
-      initialValues={{ title: "", text: "", imageUrl: "" }}
+      initialValues={{ title: "", content: "" }}
       onSubmit={handleSubmit}
       validationSchema={postSchema}
     >
       {({ isSubmitting }) => (
         <Form className={styles.form}>
           <div className={styles.field}>
-            <FormField label="Title" name="title" placeholder="Title" />
+            <FormField label="Title" name="title" placeholder="Enter title" />
           </div>
           <div className={styles.field}>
-            <FormField label="Post text" name="text" placeholder="Post text" />
-          </div>
-          <div className={styles.field}>
-            <FormField
-              label="Image url"
-              name="imageUrl"
-              type="url"
-              placeholder="Image url"
-            />
+            <FormField label="Question" name="content" placeholder="Enter question" />
           </div>
           <Button type="submit" disabled={isSubmitting}>
             Post

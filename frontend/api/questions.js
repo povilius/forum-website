@@ -1,4 +1,4 @@
-
+import { API } from "./consts"
 import axios from 'axios';
 
 const API_BASE_URL = `http://localhost:3000` // Replace with your backend server URL
@@ -23,4 +23,14 @@ export const createQuestion = async (question) => {
 export const deleteQuestion = async (id) => {
   const response = await api.delete(`/questions/${id}`);
   return response.data;
+};
+
+export const postQuestion = async (question) => {
+  try {
+    const response = await axios.post(`${API}/questions`, question);
+    return response.data
+  } catch (error) {
+    console.error("Error posting question", error);
+    throw error; // Rethrow the error so the calling code can handle it
+  }
 };

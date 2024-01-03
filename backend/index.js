@@ -126,7 +126,7 @@ app.post("/questions", async (req, res) => {
     const newQuestion = {
       title,
       content,
-      userId: ObjectId(userId),
+      userId: new ObjectId(userId),
       createdAt: new Date(),
       answers: [],
     }
@@ -138,8 +138,8 @@ app.post("/questions", async (req, res) => {
 
     res.status(201).json({ message: "Question created successfully", questionId: result.insertedId })
   } catch (error) {
-    console.error("Error creating question", error)
-    res.status(500).json({ error: "Internal Server Error" })
+    console.error("Error creating question", error);
+    res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 })
 
@@ -151,7 +151,7 @@ app.patch("/questions/:id", async (req, res) => {
     const result = await client
       .db("forum-website")
       .collection("questions")
-      .updateOne({ _id: ObjectId(questionId) }, { $set: { title, content } })
+      .updateOne({ id: ObjectId(questionId) }, { $set: { title, content } })
 
     if (result.matchedCount === 0) {
       return res.status(404).json({ error: "Question not found" })

@@ -21,32 +21,40 @@ const Home = () => {
 
   const handleSubmit = async (values) => {
     try {
+      console.log("Submitting question:", values);
       const question = { ...values, createdBy: user.email };
       const response = await createQuestion(question);
+      console.log("Server response:", response);
       setQuestions((prevQuestions) => [...prevQuestions, response]);
     } catch (error) {
-      console.error(error);
+      console.error("Error submitting question:", error);
     }
   };
 
   const handleDeleteQuestion = async (id) => {
     try {
+      console.log('Deleting question with ID:', id);
+  
+      if (id === undefined || id === null) {
+        throw new Error('Invalid question ID');
+      }
+  
       await deleteQuestion(id);
       setQuestions((prevQuestions) => prevQuestions.filter((question) => question.id !== id));
     } catch (error) {
-      console.error(error);
+      console.error(`Error deleting question: ${error.message}`);
     }
   };
 
   return (
     <div className={styles.container}>
-      {isLoggedIn && <PostForm handleSubmit={handleSubmit} />}
+      {isLoggedIn && <PostForm handleSubmit={handleSubmit} id={""}/>}
       <div className={styles.posts}>
         {questions.map((question) => (
           <PostCard
-            key={question.id}
-            post={question}
-            handleDeleteQuestion={() =>  handleDeleteQuestion(question.id)}
+            key={question._id} 
+            question={question} 
+            handleDeleteQuestion={handleDeleteQuestion}
           />
         ))}
       </div>
@@ -55,3 +63,4 @@ const Home = () => {
 };
 
 export default Home;
+

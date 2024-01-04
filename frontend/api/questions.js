@@ -11,8 +11,14 @@ const api = axios.create({
 });
 
 export const fetchQuestions = async () => {
-  const response = await api.get('/questions');
-  return response.data;
+  try {
+    const response = await api.get('/questions');
+    console.log("Fetched questions:", response);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching questions:", error);
+    throw error; // Rethrow the error so the calling code can handle it
+  }
 };
 
 export const createQuestion = async (question) => {

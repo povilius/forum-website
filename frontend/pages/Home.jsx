@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";
+import AnswerForm from "../components/AnswerForm";
 import { UserContext } from "../context/UserContext";
 import { fetchQuestions, createQuestion, deleteQuestion } from "../api/questions";
 import styles from "./Home.module.scss";
@@ -10,20 +11,14 @@ const Home = () => {
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchQuestions();
-        console.log("Fetched questions:", response);
+    fetchQuestions()
+      .then((response) => {
         setQuestions(response);
-      } catch (error) {
+      })
+      .catch((error) => {
         console.error(error);
-      }
-    };
-  
-    fetchData();
+      });
   }, []);
-  
-
 
   const handleSubmit = async (values) => {
     try {
@@ -46,27 +41,58 @@ const Home = () => {
       }
   
       await deleteQuestion(id);
-      const updatedQuestions = await fetchQuestions();
-      setQuestions(updatedQuestions);
+      setQuestions((prevQuestions) => prevQuestions.filter((question) => question.id !== id));
     } catch (error) {
       console.error(`Error deleting question: ${error.message}`);
     }
   };
-  
-  
 
-
+  const handleAddAnswer = async (questionId, answerContent) => {
+    try {
+      console.log("Adding answer:", answerContent);
+      // Call your API function to post the answer
+      // For example:
+      // const response = await postAnswer(questionId, answerContent);
+  
+      // If you have a real API function, handle the response accordingly
+      // For now, let's assume it was successful
+      const fakeResponse = { status: 201, data: { answerId: "fakeId" } };
+  
+      if (fakeResponse.status === 201) {
+        // Fetch the updated list of questions
+        fetchQuestions()
+          .then((response) => {
+            setQuestions(response);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        console.error("Failed to add answer:", fakeResponse.data.error);
+        // Handle the error as needed
+      }
+    } catch (error) {
+      console.error("Error adding answer:", error);
+      // Handle the error as needed
+    }
+  };
 
   return (
     <div className={styles.container}>
       {isLoggedIn && <PostForm handleSubmit={handleSubmit} id={""} />}
       <div className={styles.posts}>
-      {questions.map((question) => (
+        {questions.map((question) => (
           <div key={question._id}>
             <PostCard
               question={question}
               handleDeleteQuestion={handleDeleteQuestion}
+              handleAddAnswer={handleAddAnswer}
             />
+            {user && (
+              <div className={styles.answerForm}>
+                <AnswerForm onSubmit={(content) => handleAddAnswer(question._id, content)} />
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -75,3 +101,5 @@ const Home = () => {
 };
 
 export default Home;
+
+

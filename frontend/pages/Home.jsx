@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";
-import AnswerForm from "../components/AnswerForm";
+// import AnswerForm from "../components/AnswerForm";
+import { createAnswer, fetchAnswers } from "../api/answers";
 import { UserContext } from "../context/UserContext";
 import { fetchQuestions, createQuestion, deleteQuestion } from "../api/questions";
 import styles from "./Home.module.scss";
@@ -50,30 +51,29 @@ const Home = () => {
   const handleAddAnswer = async (questionId, answerContent) => {
     try {
       console.log("Adding answer:", answerContent);
+
       // Call your API function to post the answer
-      // For example:
-      // const response = await postAnswer(questionId, answerContent);
-  
+      const response = await createAnswer(questionId, {
+        content: answerContent,
+        userId: user.userId, // Change this based on your user data structure
+      });
+
       // If you have a real API function, handle the response accordingly
-      // For now, let's assume it was successful
-      const fakeResponse = { status: 201, data: { answerId: "fakeId" } };
-  
-      if (fakeResponse.status === 201) {
-        // Fetch the updated list of questions
-        fetchQuestions()
-          .then((response) => {
-            setQuestions(response);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+      if (response.message === "Answer created successfully") {
+        // Fetch the updated list of answers for the current question
+        const updatedAnswers = await fetchAnswers(questionId);
+        // Find the question in the state and update its answers
+        setQuestions((prevQuestions) =>
+          prevQuestions.map((question) =>
+            question._id === questionId ? { ...question, answers: updatedAnswers } : question
+          )
+        );
+        console.log("Answer added successfully");
       } else {
-        console.error("Failed to add answer:", fakeResponse.data.error);
-        // Handle the error as needed
+        console.error("Failed to add answer:", response.error);
       }
     } catch (error) {
       console.error("Error adding answer:", error);
-      // Handle the error as needed
     }
   };
 
@@ -88,11 +88,11 @@ const Home = () => {
               handleDeleteQuestion={handleDeleteQuestion}
               handleAddAnswer={handleAddAnswer}
             />
-            {user && (
+            {/* {user && (
               <div className={styles.answerForm}>
                 <AnswerForm onSubmit={(content) => handleAddAnswer(question._id, content)} />
               </div>
-            )}
+            )} */}
           </div>
         ))}
       </div>

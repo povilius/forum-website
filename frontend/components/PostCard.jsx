@@ -30,20 +30,19 @@ const PostCard = ({ question, handleDeleteQuestion, handleAddAnswer }) => {
           )}
         </div>
         
-        {/* Display answers */}
+        
         {question.answers && question.answers.length > 0 && (
           <div className={styles.answers}>
             <h3>Answers:</h3>
             {question.answers.map(answer => (
               <div key={answer._id}>
                 <p>{answer.content}</p>
-                {/* Add like/dislike buttons and other answer details if needed */}
+             
               </div>
             ))}
           </div>
         )}
 
-        {/* Answer Form */}
         {user && (
           <div className={styles.answerForm}>
             <AnswerForm onSubmit={handleAnswerSubmit} />

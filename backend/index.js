@@ -119,6 +119,7 @@ app.get("/questions", async (req, res) => {
   }
 })
 
+
 app.post("/questions", async (req, res) => {
   const { title, content, userId } = req.body
 
@@ -131,10 +132,13 @@ app.post("/questions", async (req, res) => {
       answers: [],
     }
 
-    const result = await client
+    const con = await client.connect()
+    const result = await con
       .db("forum-website")
       .collection("questions")
       .insertOne(newQuestion)
+
+      await content.close()
 
     res.status(201).json({ message: "Question created successfully", questionId: result.insertedId })
   } catch (error) {

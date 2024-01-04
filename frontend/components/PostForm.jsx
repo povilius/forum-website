@@ -10,11 +10,11 @@ const postSchema = Yup.object().shape({
   content: Yup.string().required("Required")
 });
 
-const PostForm = ({ handleSubmit, id }) => {
+const PostForm = ({ handleSubmit, _id, createdBy }) => {
   return (
     <Formik
       initialValues={{ title: "", content: "" }}
-      onSubmit={(values) => handleSubmit(values, id)}
+      onSubmit={(values) => handleSubmit(values, _id, createdBy)}
       validationSchema={postSchema}
     >
       {({ isSubmitting }) => (
@@ -36,7 +36,8 @@ const PostForm = ({ handleSubmit, id }) => {
 
 PostForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  id: PropTypes.string,
+  _id: PropTypes.string,
+  createdBy: PropTypes.string
 };
 
 export default PostForm;

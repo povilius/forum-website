@@ -24,7 +24,7 @@ const Home = () => {
   const handleSubmit = async (values) => {
     try {
       console.log("Submitting question:", values);
-      const question = { ...values, createdBy: user.email };
+      const question = { ...values, createdBy: user.username };
       const response = await createQuestion(question);
       console.log("Server response:", response);
       setQuestions((prevQuestions) => [...prevQuestions, response]);
@@ -88,11 +88,6 @@ const Home = () => {
               handleDeleteQuestion={handleDeleteQuestion}
               handleAddAnswer={handleAddAnswer}
             />
-            {/* {user && (
-              <div className={styles.answerForm}>
-                <AnswerForm onSubmit={(content) => handleAddAnswer(question._id, content)} />
-              </div>
-            )} */}
           </div>
         ))}
       </div>

@@ -105,12 +105,10 @@ app.get("/users", async (req, res) => {
 
 app.get("/questions", async (req, res) => {
   try {
-    const questions = await client
-      .db("forum-website")
-      .collection("questions")
-      .find()
-      .sort({ createdAt: -1 })
-      .toArray()
+    const con = await client.connect()
+    const data = await con.db("forum-website").collection("questions").find().toArray()
+    await con.close()
+    res.send(data)
 
     res.status(200).json(questions)
   } catch (error) {
@@ -121,26 +119,20 @@ app.get("/questions", async (req, res) => {
 
 
 app.post("/questions", async (req, res) => {
-  const { title, content, userId } = req.body
 
   try {
-    const newQuestion = {
-      title,
-      content,
-      userId: new ObjectId(userId),
-      createdAt: new Date(),
-      answers: [],
-    }
+    const question = req.body
+    const questionWithOwnerId = { ...question, userId: new ObjectId(question.userId) }
 
     const con = await client.connect()
-    const result = await con
+    const data = await con
       .db("forum-website")
       .collection("questions")
-      .insertOne(newQuestion)
+      .insertOne(questionWithOwnerId)
+    await con.close()
 
-      await content.close()
-
-    res.status(201).json({ message: "Question created successfully", questionId: result.insertedId })
+    res.send(data)
+    // res.status(201).json({ message: "Question created successfully" })
   } catch (error) {
     console.error("Error creating question", error);
     res.status(500).json({ error: "Internal Server Error", details: error.message });
@@ -169,17 +161,16 @@ app.patch("/questions/:id", async (req, res) => {
 })
 
 app.delete("/questions/:id", async (req, res) => {
-  const questionId = req.params.id
-
   try {
-    const result = await client
+    const id = req.params.id
+    const con = await client.connect()
+    const data = await con
       .db("forum-website")
       .collection("questions")
-      .deleteOne({ _id: ObjectId(questionId) })
+      .deleteOne({ _id: new ObjectId(id) })
+    await con.close()
 
-    if (result.deletedCount === 0) {
-      return res.status(404).json({ error: "Question not found" })
-    }
+    res.send(data)
 
     res.status(200).json({ message: "Question deleted successfully" })
   } catch (error) {

@@ -110,7 +110,7 @@ app.get("/questions", async (req, res) => {
     await con.close()
     res.send(data)
 
-    res.status(200).json(questions)
+    // res.status(200).json(questions)
   } catch (error) {
     console.error("Error fetching questions", error)
     res.status(500).json({ error: "Internal Server Error" })
@@ -132,7 +132,6 @@ app.post("/questions", async (req, res) => {
     await con.close()
 
     res.send(data)
-    // res.status(201).json({ message: "Question created successfully" })
   } catch (error) {
     console.error("Error creating question", error);
     res.status(500).json({ error: "Internal Server Error", details: error.message });
@@ -172,7 +171,6 @@ app.delete("/questions/:id", async (req, res) => {
 
     res.send(data)
 
-    res.status(200).json({ message: "Question deleted successfully" })
   } catch (error) {
     console.error("Error deleting question", error)
     res.status(500).json({ error: "Internal Server Error" })

@@ -7,7 +7,7 @@ const FormField = ({ label, ...props }) => {
 
   return (
     <div className={styles.formField}>
-      <label htmlFor={props._id}>{label}</label>
+      <label htmlFor={props.name}>{label}</label>
       <input {...field} {...props} />
       {meta.touched && meta.error ? (
         <div className={styles.error}>{meta.error}</div>
@@ -18,7 +18,7 @@ const FormField = ({ label, ...props }) => {
 
 FormField.propTypes = {
   label: PropTypes.string.isRequired,
-  _id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   content: PropTypes.string,
   placeholder: PropTypes.string,
 };

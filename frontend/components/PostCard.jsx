@@ -4,9 +4,11 @@ import Button from "./Button";
 import AnswerForm from './AnswerForm';
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
+import { ThemeContext } from "../context/ThemeContext"
 
 const PostCard = ({ question, handleDeleteQuestion, handleAddAnswer }) => {
   const { user } = useContext(UserContext);
+  const { isDarkMode } = useContext(ThemeContext)
 
   const onDeleteClick = () => {
     if (user && question.createdBy === user.email) {
@@ -15,16 +17,17 @@ const PostCard = ({ question, handleDeleteQuestion, handleAddAnswer }) => {
   };
 
   const handleAnswerSubmit = (answerContent) => {
-    // Pass the answer content and question ID to the handler
     handleAddAnswer(question._id, answerContent);
   };
 
+ 
   return (
+
     <div className={styles.postCardWrapper}>
       <div className={styles.postCard}>
-        <h2 className={styles.postTitle}>{question.title}</h2>
+        <h2 style={{ color: isDarkMode ? "white" : "inherit" }} className={styles.postTitle}>{question.title}</h2>
         <div className={styles.postFooter}>
-          <p className={styles.postText}>{question.content}</p>
+          <p style={{ color: isDarkMode ? "white" : "inherit" }} className={styles.postText}>{question.content}</p>
           {user && question.createdBy === user.email && (
             <Button onClick={onDeleteClick}>Delete</Button>
           )}
@@ -55,10 +58,10 @@ const PostCard = ({ question, handleDeleteQuestion, handleAddAnswer }) => {
 
 PostCard.propTypes = {
   question: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    createdBy: PropTypes.string.isRequired,
+    _id: PropTypes.string,
+    title: PropTypes.string,
+    content: PropTypes.string,
+    createdBy: PropTypes.array,
     answers: PropTypes.arrayOf(PropTypes.object),
   }),
   handleDeleteQuestion: PropTypes.func.isRequired,

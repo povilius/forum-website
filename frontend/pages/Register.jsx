@@ -6,6 +6,8 @@ import Button from "../components/Button";
 import { PATHS } from "../routes/consts";
 import { createUser } from "../api/users";
 import styles from "./Login.module.scss";
+import { ThemeContext } from "../context/ThemeContext"
+import { useContext } from "react";
 
 const registerSchema = Yup.object().shape({
   username: Yup.string().required("Required"),
@@ -19,6 +21,7 @@ const registerSchema = Yup.object().shape({
 });
 
 const Register = () => {
+  const { isDarkMode } = useContext(ThemeContext)
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
@@ -31,7 +34,7 @@ const Register = () => {
   };
 
   return (
-    <div className={styles.loginContainer}>
+    <div style={{ color: isDarkMode ? "white" : "inherit" }} className={styles.loginContainer}>
       <div className={styles.formWrapper}>
         <h1>Register</h1>
         <Formik
@@ -84,7 +87,7 @@ const Register = () => {
               </Button>
               <div className={styles.link}>
                 Already have an account?{" "}
-                <Link to={PATHS.Home}>Back to login</Link>
+                <Link style={{ color: isDarkMode ? "#d3a718" : "inherit" }} to={PATHS.Home}>Back to login</Link>
               </div>
             </Form>
           )}

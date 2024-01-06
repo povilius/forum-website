@@ -8,7 +8,7 @@ export const fetchQuestions = async () => {
 };
 
 export const createQuestion = async (question) => {
-  const response = await axios.post(`${API}/posts`, question);
+  const response = await axios.post(`${API}/questions`, question);
   return response.data;
 };
 

@@ -1,19 +1,15 @@
 @import "../styles/colors";
 
 .button {
-  background-color: $primary-color;
-  color: white;
+  color: $primary-color;
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: 0.3s;
 
   &:hover {
-    background-color: $primary-color-dark;
-  }
-
-  &:disabled {
-    background-color: #ccc;
+    color: $primary-color-yellow;
+    background-color: #ececec;
   }
 }

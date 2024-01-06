@@ -89,13 +89,25 @@ app.post("/login", async (req, res) => {
 
 app.get("/users", async (req, res) => {
   try {
-    const users = await client
+    const con = await client.connect()
+    const data = await con
       .db("forum-website")
       .collection("users")
-      .find()
-      .toArray();
+      .aggregate([
+        {
+          $lookup: {
+            from: "questions", // The collection to join with
+            localField: "_id", // The field from the people collection
+            foreignField: "ownerId", // The field from the pets collection
+            as: "questions", // The output array where the joined data will be
+          },
+        },
+      ])
+      .toArray()
 
-    res.status(200).json(users);
+      
+
+      res.send(data)
   } catch (error) {
     console.error("Error fetching users", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -106,11 +118,23 @@ app.get("/users", async (req, res) => {
 app.get("/questions", async (req, res) => {
   try {
     const con = await client.connect()
-    const data = await con.db("forum-website").collection("questions").find().toArray()
-    await con.close()
+    const data = await con.db("forum-website").collection("questions").aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "createdBy",
+        },
+      },
+      // {
+      //   $unwind: "$createdBy",
+      // },
+    ]).toArray()
+
     res.send(data)
 
-    // res.status(200).json(questions)
+
   } catch (error) {
     console.error("Error fetching questions", error)
     res.status(500).json({ error: "Internal Server Error" })
@@ -129,7 +153,7 @@ app.post("/questions", async (req, res) => {
       .db("forum-website")
       .collection("questions")
       .insertOne(questionWithOwnerId)
-    await con.close()
+
 
     res.send(data)
   } catch (error) {

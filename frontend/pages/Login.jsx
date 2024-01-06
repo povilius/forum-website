@@ -8,6 +8,7 @@ import { loginUser } from "../api/users";
 import { useContext, useState } from "react";
 import { UserContext } from "../context/UserContext";
 import styles from "./Login.module.scss";
+import { ThemeContext } from "../context/ThemeContext"
 
 const loginSchema = Yup.object().shape({
   username: Yup.string().required("Required"),
@@ -19,6 +20,7 @@ const loginSchema = Yup.object().shape({
 const Login = () => {
   const { setUser } = useContext(UserContext);
   const [error, setError] = useState("");
+  const { isDarkMode } = useContext(ThemeContext)
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
@@ -38,8 +40,8 @@ const Login = () => {
   
 
   return (
-    <div className={styles.loginContainer}>
-      <div className={styles.formWrapper}>
+    <div style={{ color: isDarkMode ? "white" : "inherit" }} className={styles.loginContainer}>
+      <div style={{ color: isDarkMode ? "white" : "inherit" }} className={styles.formWrapper}>
         <h1>Login</h1>
         <Formik
           initialValues={{ username: "", password: "" }}
@@ -70,7 +72,7 @@ const Login = () => {
               </Button>
               <div className={styles.link}>
                 Don&apos;t have an account?{" "}
-                <Link to={PATHS.Register}>Register here</Link>
+                <Link style={{ color: isDarkMode ? "#d3a718" : "inherit" }} to={PATHS.Register}>Register here</Link>
               </div>
             </Form>
           )}

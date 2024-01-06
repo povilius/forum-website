@@ -4,13 +4,18 @@ import FormField from "./FormField";
 import Button from "../components/Button";
 import PropTypes from "prop-types";
 import styles from "./PostForm.module.scss";
+import { ThemeContext } from "../context/ThemeContext"
+import { useContext } from "react";
 
 const postSchema = Yup.object().shape({
   title: Yup.string().required("Required"),
   content: Yup.string().required("Required")
 });
 
-const PostForm = ({ handleSubmit, _id, createdBy }) => {
+const PostForm = ({handleSubmit, _id, createdBy})=>{
+
+  const { isDarkMode } = useContext(ThemeContext)
+
   return (
     <Formik
       initialValues={{ title: "", content: "" }}
@@ -19,10 +24,10 @@ const PostForm = ({ handleSubmit, _id, createdBy }) => {
     >
       {({ isSubmitting }) => (
         <Form className={styles.form}>
-          <div className={styles.field}>
+          <div style={{ color: isDarkMode ? "white" : "inherit" }} className={styles.field}>
             <FormField label="Title" name="title" placeholder="Enter title"  />
           </div>
-          <div className={styles.field}>
+          <div style={{ color: isDarkMode ? "white" : "inherit" }} className={styles.field}>
             <FormField label="Question" name="content" placeholder="Enter question" />
           </div>
           <Button type="submit" disabled={isSubmitting}>
@@ -37,6 +42,7 @@ const PostForm = ({ handleSubmit, _id, createdBy }) => {
 PostForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   _id: PropTypes.string,
+  title: PropTypes.string,
   createdBy: PropTypes.string
 };
 

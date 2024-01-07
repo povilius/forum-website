@@ -1,5 +1,4 @@
-
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
 const AnswerList = ({ answers }) => {
   return (
@@ -11,11 +10,11 @@ const AnswerList = ({ answers }) => {
         ))}
       </ul>
     </div>
-  );
-};
+  )
+}
 
 AnswerList.propTypes = {
   answers: PropTypes.array.isRequired,
-};
+}
 
-export default AnswerList;
+export default AnswerList

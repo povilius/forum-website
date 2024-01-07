@@ -1,20 +1,20 @@
-import PropTypes from 'prop-types';
-import { Formik, Form } from 'formik';
-import Button from './Button';
-import AnswerField from './AnswerField';
-import styles from "./AnswerForm.module.scss";
+import PropTypes from 'prop-types'
+import { Formik, Form } from 'formik'
+import Button from './Button'
+import AnswerField from './AnswerField'
+import styles from "./AnswerForm.module.scss"
 import { ThemeContext } from "../context/ThemeContext"
-import { useContext } from "react";
+import { useContext } from "react"
 
 const AnswerForm = ({ onSubmit }) => {
   const { isDarkMode } = useContext(ThemeContext)
   const initialValues = {
     content: '',
-  };
+  }
 
   const handleFormSubmit = (values) => {
-    onSubmit(values);
-  };
+    onSubmit(values)
+  }
 
   return (
     <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
@@ -28,15 +28,11 @@ const AnswerForm = ({ onSubmit }) => {
         </div>
       </Form>
     </Formik>
-  );
-};
+  )
+}
 
 AnswerForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-};
+}
 
-export default AnswerForm; 
-
-
-
-
+export default AnswerForm

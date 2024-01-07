@@ -1,6 +1,5 @@
-
-import PropTypes from 'prop-types';
-import { Button } from './Button';
+import PropTypes from 'prop-types'
+import { Button } from './Button'
 
 const LikeDislikeButtons = ({ onLike, onDislike }) => {
   return (
@@ -8,12 +7,12 @@ const LikeDislikeButtons = ({ onLike, onDislike }) => {
       <Button onClick={onLike}>Like</Button>
       <Button onClick={onDislike}>Dislike</Button>
     </div>
-  );
-};
+  )
+}
 
 LikeDislikeButtons.propTypes = {
   onLike: PropTypes.func.isRequired,
   onDislike: PropTypes.func.isRequired,
-};
+}
 
-export default LikeDislikeButtons;
+export default LikeDislikeButtons

@@ -1,9 +1,9 @@
-import { useField } from "formik";
-import PropTypes from "prop-types";
-import styles from "./FormField.module.scss";
+import { useField } from "formik"
+import PropTypes from "prop-types"
+import styles from "./FormField.module.scss"
 
 const FormField = ({ label, ...props }) => {
-  const [field, meta] = useField(props);
+  const [field, meta] = useField(props)
 
   return (
     <div className={styles.formField}>
@@ -13,14 +13,14 @@ const FormField = ({ label, ...props }) => {
         <div className={styles.error}>{meta.error}</div>
       ) : null}
     </div>
-  );
-};
+  )
+}
 
 FormField.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   content: PropTypes.string,
   placeholder: PropTypes.string,
-};
+}
 
-export default FormField;
+export default FormField

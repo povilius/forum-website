@@ -1,24 +1,24 @@
-import PropTypes from "prop-types";
-import styles from "./PostCard.module.scss";
-import Button from "./Button";
-import AnswerForm from './AnswerForm';
-import { useContext } from "react";
-import { UserContext } from "../context/UserContext";
+import PropTypes from "prop-types"
+import styles from "./PostCard.module.scss"
+import Button from "./Button"
+import AnswerForm from './AnswerForm'
+import { useContext } from "react"
+import { UserContext } from "../context/UserContext"
 import { ThemeContext } from "../context/ThemeContext"
 
 const PostCard = ({ question, handleDeleteQuestion, handleAddAnswer }) => {
-  const { user } = useContext(UserContext);
+  const { user } = useContext(UserContext)
   const { isDarkMode } = useContext(ThemeContext)
 
   const onDeleteClick = () => {
     if (user && question.createdBy === user.email) {
-      handleDeleteQuestion(question._id);
+      handleDeleteQuestion(question._id)
     }
-  };
+  }
 
   const handleAnswerSubmit = (answerContent) => {
-    handleAddAnswer(question._id, answerContent);
-  };
+    handleAddAnswer(question._id, answerContent)
+  }
 
  
   return (
@@ -53,8 +53,8 @@ const PostCard = ({ question, handleDeleteQuestion, handleAddAnswer }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
 PostCard.propTypes = {
   question: PropTypes.shape({
@@ -66,8 +66,6 @@ PostCard.propTypes = {
   }),
   handleDeleteQuestion: PropTypes.func.isRequired,
   handleAddAnswer: PropTypes.func.isRequired,
-};
+}
 
-export default PostCard;
-
-
+export default PostCard

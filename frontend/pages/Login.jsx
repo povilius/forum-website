@@ -1,13 +1,13 @@
-import { Formik, Form } from "formik";
-import { Link, useNavigate } from "react-router-dom";
-import * as Yup from "yup";
-import FormField from "../components/FormField";
-import Button from "../components/Button";
-import { PATHS } from "../routes/consts";
-import { loginUser } from "../api/users";
-import { useContext, useState } from "react";
-import { UserContext } from "../context/UserContext";
-import styles from "./Login.module.scss";
+import { Formik, Form } from "formik"
+import { Link, useNavigate } from "react-router-dom"
+import * as Yup from "yup"
+import FormField from "../components/FormField"
+import Button from "../components/Button"
+import { PATHS } from "../routes/consts"
+import { loginUser } from "../api/users"
+import { useContext, useState } from "react"
+import { UserContext } from "../context/UserContext"
+import styles from "./Login.module.scss"
 import { ThemeContext } from "../context/ThemeContext"
 
 const loginSchema = Yup.object().shape({
@@ -15,30 +15,29 @@ const loginSchema = Yup.object().shape({
   password: Yup.string()
     .min(6, "Password must be at least 6 characters")
     .required("Required"),
-});
+})
 
 const Login = () => {
-  const { setUser } = useContext(UserContext);
-  const [error, setError] = useState("");
+  const { setUser } = useContext(UserContext)
+  const [error, setError] = useState("")
   const { isDarkMode } = useContext(ThemeContext)
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleSubmit = async (values) => {
     try {
-      const response = await loginUser(values);
+      const response = await loginUser(values)
       if (response && response.userId) {
-        setUser(response);
-        setError("");
-        navigate(PATHS.Home);
+        setUser(response)
+        setError("")
+        navigate(PATHS.Home)
       } else {
-        setError("Username or password is incorrect");
+        setError("Username or password is incorrect")
       }
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
   
-
   return (
     <div style={{ color: isDarkMode ? "white" : "inherit" }} className={styles.loginContainer}>
       <div style={{ color: isDarkMode ? "white" : "inherit" }} className={styles.formWrapper}>
@@ -79,7 +78,7 @@ const Login = () => {
         </Formik>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

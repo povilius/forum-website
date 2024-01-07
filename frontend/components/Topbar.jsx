@@ -1,22 +1,22 @@
-import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
-import Button from "./Button";
-import { PATHS } from "../routes/consts";
-import styles from "./Topbar.module.scss";
+import { useContext } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { UserContext } from "../context/UserContext"
+import Button from "./Button"
+import { PATHS } from "../routes/consts"
+import styles from "./Topbar.module.scss"
 import { FaRegMoon } from "react-icons/fa"
-import { GoSun } from "react-icons/go";
+import { GoSun } from "react-icons/go"
 import { ThemeContext } from "../context/ThemeContext"
-import Logo from "./Logo";
+import Logo from "./Logo"
 
 const Topbar = () => {
-  const { user, isLoggedIn, handleLogout } = useContext(UserContext);
+  const { user, isLoggedIn, handleLogout } = useContext(UserContext)
   const { isDarkMode, toggleTheme } = useContext(ThemeContext)
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleRedirectToLogin = () => {
-    navigate(PATHS.Login);
-  };
+    navigate(PATHS.Login)
+  }
 
   return (
     <header className={styles.topbar}>
@@ -47,7 +47,7 @@ const Topbar = () => {
         </div>
       </nav>
     </header>
-  );
-};
+  )
+}
 
-export default Topbar;
+export default Topbar

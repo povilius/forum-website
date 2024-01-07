@@ -1,58 +1,50 @@
-
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import AnswerForm from './AnswerForm';
-import AnswerList from './AnswerList';
-import LikeDislikeButtons from './LikeDislikeButtons';
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import AnswerForm from './AnswerForm'
+import AnswerList from './AnswerList'
+import LikeDislikeButtons from './LikeDislikeButtons'
 
 const QuestionList = () => {
-  const [questions, setQuestions] = useState([]);
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [questions, setQuestions] = useState([])
+  const [selectedQuestion, setSelectedQuestion] = useState(null)
 
   useEffect(() => {
-    // Fetch questions (answered/unanswered) and update state
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get('/questions/answered'); // or /questions/unanswered
-        setQuestions(response.data);
+        const response = await axios.get('/questions/answered')
+        setQuestions(response.data)
       } catch (error) {
-        console.error('Error fetching questions', error);
+        console.error('Error fetching questions', error)
       }
-    };
+    }
 
-    fetchQuestions();
-  }, []);
+    fetchQuestions()
+  }, [])
 
   const handleAnswerSubmit = async values => {
-    // Submit answer and update state
     try {
-      const response = await axios.post(`/questions/${selectedQuestion._id}/answers`, values);
-      // Assuming the response contains the updated list of answers
-      setSelectedQuestion(prevQuestion => ({ ...prevQuestion, answers: response.data }));
+      const response = await axios.post(`/questions/${selectedQuestion._id}/answers`, values)
+      setSelectedQuestion(prevQuestion => ({ ...prevQuestion, answers: response.data }))
     } catch (error) {
-      console.error('Error submitting answer', error);
+      console.error('Error submitting answer', error)
     }
-  };
+  }
 
   const handleLike = async answerId => {
-    // Send a request to like the answer
     try {
-      await axios.post(`/answers/${answerId}/like`);
-      // Assuming the response contains the updated list of likes
+      await axios.post(`/answers/${answerId}/like`)
     } catch (error) {
-      console.error('Error liking answer', error);
+      console.error('Error liking answer', error)
     }
-  };
+  }
 
   const handleDislike = async answerId => {
-    // Send a request to dislike the answer
     try {
-      await axios.post(`/answers/${answerId}/dislike`);
-      // Assuming the response contains the updated list of dislikes
+      await axios.post(`/answers/${answerId}/dislike`)
     } catch (error) {
-      console.error('Error disliking answer', error);
+      console.error('Error disliking answer', error)
     }
-  };
+  }
 
   return (
     <div>
@@ -81,7 +73,7 @@ const QuestionList = () => {
         ))}
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default QuestionList;
+export default QuestionList

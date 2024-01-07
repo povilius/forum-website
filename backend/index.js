@@ -16,7 +16,6 @@ async function start() {
   try {
     await client.connect()
     console.log("Connected to the database")
-
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`)
     })
@@ -41,13 +40,11 @@ app.post("/register", async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
-
     const newUser = {
       username,
       email,
       password: hashedPassword,
     }
-
     const result = await client
       .db("forum-website")
       .collection("users")
@@ -58,7 +55,7 @@ app.post("/register", async (req, res) => {
     console.error("Error registering user", error)
     res.status(500).json({ error: "Internal Server Error" })
   }
-});
+})
 
 
 app.post("/login", async (req, res) => {
@@ -83,9 +80,9 @@ app.post("/login", async (req, res) => {
     res.status(200).json({ message: "Login successful", userId: user._id })
   } catch (error) {
     console.error("Error logging in user", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error" })
   }
-});
+})
 
 app.get("/users", async (req, res) => {
   try {
@@ -96,23 +93,21 @@ app.get("/users", async (req, res) => {
       .aggregate([
         {
           $lookup: {
-            from: "questions", // The collection to join with
-            localField: "_id", // The field from the people collection
-            foreignField: "ownerId", // The field from the pets collection
-            as: "questions", // The output array where the joined data will be
+            from: "questions",
+            localField: "_id",
+            foreignField: "ownerId",
+            as: "questions",
           },
         },
       ])
       .toArray()
 
-      
-
       res.send(data)
   } catch (error) {
-    console.error("Error fetching users", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("Error fetching users", error)
+    res.status(500).json({ error: "Internal Server Error" })
   }
-});
+})
 
 
 app.get("/questions", async (req, res) => {
@@ -133,8 +128,6 @@ app.get("/questions", async (req, res) => {
     ]).toArray()
 
     res.send(data)
-
-
   } catch (error) {
     console.error("Error fetching questions", error)
     res.status(500).json({ error: "Internal Server Error" })
@@ -154,11 +147,10 @@ app.post("/questions", async (req, res) => {
       .collection("questions")
       .insertOne(questionWithOwnerId)
 
-
     res.send(data)
   } catch (error) {
-    console.error("Error creating question", error);
-    res.status(500).json({ error: "Internal Server Error", details: error.message });
+    console.error("Error creating question", error)
+    res.status(500).json({ error: "Internal Server Error", details: error.message })
   }
 })
 
@@ -178,7 +170,7 @@ app.patch("/questions/:id", async (req, res) => {
 
     res.status(200).json({ message: "Question updated successfully" })
   } catch (error) {
-    console.error("Error updating question", error);
+    console.error("Error updating question", error)
     res.status(500).json({ error: "Internal Server Error" })
   }
 })
@@ -194,7 +186,6 @@ app.delete("/questions/:id", async (req, res) => {
     await con.close()
 
     res.send(data)
-
   } catch (error) {
     console.error("Error deleting question", error)
     res.status(500).json({ error: "Internal Server Error" })
@@ -240,7 +231,7 @@ app.post("/questions/:id/answers", async (req, res) => {
       .updateOne({ _id: ObjectId(questionId) }, { $push: { answers: newAnswer } })
 
     if (result.matchedCount === 0) {
-      return res.status(404).json({ error: "Question not found" });
+      return res.status(404).json({ error: "Question not found" })
     }
 
     res.status(201).json({ message: "Answer created successfully", answerId: newAnswer._id })
@@ -261,7 +252,7 @@ app.patch("/answers/:id", async (req, res) => {
       .updateOne({ "answers._id": ObjectId(answerId) }, { $set: { "answers.$.content": content } })
 
     if (result.matchedCount === 0) {
-      return res.status(404).json({ error: "Answer not found" });
+      return res.status(404).json({ error: "Answer not found" })
     }
 
     res.status(200).json({ message: "Answer updated successfully" })
@@ -307,13 +298,13 @@ app.post("/answers/:id/like", async (req, res) => {
 
     res.status(200).json({ message: "Like added successfully" })
   } catch (error) {
-    console.error("Error adding like to answer", error);
+    console.error("Error adding like to answer", error)
     res.status(500).json({ error: "Internal Server Error" })
   }
 })
 
 app.post("/answers/:id/dislike", async (req, res) => {
-  const answerId = req.params.id;
+  const answerId = req.params.id
 
   try {
     const result = await client
@@ -341,7 +332,7 @@ app.get("/questions/answered", async (req, res) => {
       .sort({ createdAt: -1 })
       .toArray()
 
-    res.status(200).json(questions);
+    res.status(200).json(questions)
   } catch (error) {
     console.error("Error fetching answered questions", error)
     res.status(500).json({ error: "Internal Server Error" })

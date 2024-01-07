@@ -3,4 +3,4 @@ export const PATHS = {
   Forum: "/forum",
   Login: "/login",
   Register: "/register"
-};
+}

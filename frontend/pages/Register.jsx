@@ -1,13 +1,13 @@
-import { Formik, Form } from "formik";
-import { Link, useNavigate } from "react-router-dom";
-import * as Yup from "yup";
-import FormField from "../components/FormField";
-import Button from "../components/Button";
-import { PATHS } from "../routes/consts";
-import { createUser } from "../api/users";
-import styles from "./Login.module.scss";
+import { Formik, Form } from "formik"
+import { Link, useNavigate } from "react-router-dom"
+import * as Yup from "yup"
+import FormField from "../components/FormField"
+import Button from "../components/Button"
+import { PATHS } from "../routes/consts"
+import { createUser } from "../api/users"
+import styles from "./Login.module.scss"
 import { ThemeContext } from "../context/ThemeContext"
-import { useContext } from "react";
+import { useContext } from "react"
 
 const registerSchema = Yup.object().shape({
   username: Yup.string().required("Required"),
@@ -18,20 +18,20 @@ const registerSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Required"),
-});
+})
 
 const Register = () => {
   const { isDarkMode } = useContext(ThemeContext)
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleSubmit = async (values) => {
     try {
-      await createUser(values);
-      navigate(PATHS.Home);
+      await createUser(values)
+      navigate(PATHS.Home)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   return (
     <div style={{ color: isDarkMode ? "white" : "inherit" }} className={styles.loginContainer}>
@@ -94,6 +94,7 @@ const Register = () => {
         </Formik>
       </div>
     </div>
-  );
-};
-export default Register;
+  )
+}
+
+export default Register

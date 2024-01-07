@@ -1,7 +1,7 @@
-import { useContext } from "react";
+import { useContext } from "react"
 import { ThemeContext } from "../context/ThemeContext"
-import styles from "./Home.module.scss";
-import Logo from "../components/Logo";
+import styles from "./Home.module.scss"
+import Logo from "../components/Logo"
 
 const Home = () => {
   const { isDarkMode } = useContext(ThemeContext)

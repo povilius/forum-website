@@ -3,11 +3,21 @@
 .topbar {
   nav {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 1rem;
     background-color: #ececec;
+    width: 100%;
   }
+
+  .topbarItems {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-content: space-between;
+    width: 100%;
+
+    .topbarlogo {
+      width: 10%;
+    }
 
   a {
     margin-right: 2rem;
@@ -26,4 +36,5 @@
   .logout {
     display: flex;
   }
+}
 }

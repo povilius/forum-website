@@ -1,9 +1,10 @@
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding-top: 1.5rem;
+.titleWrapper {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+
+  .titleh2 {
+    margin-top: 50px;
+    font-size: 45px;
+  }
 }
